@@ -1,10 +1,10 @@
 # VitalScan-AI Setup TODO
 
-## GitHub Setup ✅ Planned
-- [ ] Create root README.md
-- [ ] Create LICENSE
-- [ ] Create .gitignore
-- [ ] git init, add, commit, remote add origin, push -u main
+## GitHub Setup ✅ Done
+- [✅] Create root README.md
+- [✅] Create LICENSE
+- [✅] Create .gitignore
+- [✅] git commit/push
 
 ## Backend Setup
 - [ ] venv & pip install
