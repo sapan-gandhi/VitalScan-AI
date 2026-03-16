@@ -26,12 +26,12 @@ def create_app() -> FastAPI:
         origins = ["*"]
 
     app.add_middleware(
-        CORSMiddleware,
-        allow_origins=origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
     prefix = "/api/v1"
     app.include_router(health.router,  tags=["System"])
