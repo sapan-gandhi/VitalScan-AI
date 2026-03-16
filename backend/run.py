@@ -1,8 +1,5 @@
-"""
-run.py — Works for both local dev and production (Render/Railway)
-"""
-import os
 import uvicorn
+import os
 from app.config.settings import get_settings
 
 if __name__ == "__main__":
@@ -10,7 +7,7 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", settings.app_port))
     uvicorn.run(
         "app.main:app",
-        host=settings.app_host,
+        host="0.0.0.0",
         port=port,
         reload=(settings.app_env == "development"),
         log_level="info",

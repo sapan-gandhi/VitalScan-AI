@@ -71,7 +71,6 @@ build/
 
 # Env
 .env
-*.pkl  # ML models - retrain locally
 
 # Logs
 *.log

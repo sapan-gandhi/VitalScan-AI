@@ -1,10 +1,7 @@
-"""
-VitalScan AI — Backend Entry Point
-"""
-
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+import os
 
 from app.config.settings import get_settings
 from app.routes import predict, history, health, auth
@@ -17,18 +14,20 @@ def create_app() -> FastAPI:
 
     app = FastAPI(
         title="VitalScan AI — Disease Risk Prediction API",
-        description=(
-            "AI-powered backend for early detection of Diabetes, "
-            "Heart Disease, and Hypertension with Supabase Auth."
-        ),
+        description="AI-powered backend for early detection of chronic diseases.",
         version="2.0.0",
         docs_url="/docs",
         redoc_url="/redoc",
     )
 
+    # CORS — allow all origins in production (lock down after testing)
+    origins = settings.cors_origins
+    if settings.app_env == "production":
+        origins = ["*"]
+
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.cors_origins,
+        allow_origins=origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -44,12 +43,13 @@ def create_app() -> FastAPI:
     async def startup_event():
         logger.info("Starting VitalScan AI backend v2.0…")
         load_models()
-        logger.info(f"CORS origins: {settings.cors_origins}")
+        logger.info(f"Environment: {settings.app_env}")
+        logger.info(f"PORT: {os.environ.get('PORT', 8000)}")
         logger.info("Backend ready.")
 
     @app.exception_handler(Exception)
     async def global_exception_handler(request: Request, exc: Exception):
-        logger.error(f"Unhandled exception on {request.url}: {exc}")
+        logger.error(f"Unhandled exception: {exc}")
         return JSONResponse(
             status_code=500,
             content={"success": False, "message": "Internal server error", "detail": str(exc)},
@@ -59,8 +59,8 @@ def create_app() -> FastAPI:
     async def root():
         return {
             "service": "VitalScan AI Backend v2.0",
-            "docs":    "/docs",
-            "health":  "/health",
+            "status": "running",
+            "docs": "/docs",
         }
 
     return app
